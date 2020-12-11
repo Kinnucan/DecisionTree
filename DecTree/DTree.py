@@ -57,16 +57,42 @@ class DecisionTree:
 
     def doID3(self, attributes, instances, defaultValue):
         """Recursive function that implements the ID3 algorithm."""
-        # TODO: This is for you to implement.
-        pass
+        if (len(instances) == 0):
+            node = TreeNode(defaultValue)
+            return node
+        elif (self.areConsistent(instances)):
+            node = TreeNode(instances[0].getCatValue())
+            return node
+        elif (len(attributes) == 0):
+            maj = self.modeOfCategory(instances)
+            node = TreeNode(maj)
+            return node
+        else:
+            best = self.findHighestGain(attributes, instances)
+            qNode = TreeNode(best)
+            maj = self.modeOfCategory(instances)
+            attVals = self.dataset.getAttributeValues(best)
+            for val in attVals:
+                newExamp = self.getSamplesWithValue(best, val, instances)
+                newAttr = attributes.copy()
+                newAttr.remove(best)
+                subTree = self.doID3(newAttr, newExamp, maj)
+                qNode.addChild(val, subTree)
+            return qNode
 
 
     def findHighestGain(self, attributes, instances):
         """Given the current available attributes, and a list of instances, this computes
         the gain for each available attribute, selecting and returning the attribute with
         the highest gain."""
-        # TODO: This helper is optional, but could simplify the structure of the recursive doID3
-        pass
+        max = 0
+        attribute = None
+        for att in attributes:
+            g = self.gain(att, instances)
+            if (g > max):
+                max = g
+                attribute = att
+        return attribute
 
 
 
