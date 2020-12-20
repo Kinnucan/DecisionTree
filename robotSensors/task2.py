@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     print("Cross validation:")
     random.seed()
-    cv = KFold(n_splits=10,shuffle=False)
+    cv = KFold(n_splits=10,shuffle=True)
     cvTree = cross_val_score(dTree, sensorData, sensorTarget, cv=cv)
     cvMLP = cross_val_score(mlp, sensorData, sensorTarget, cv=cv)
     print(cvTree, np.mean(cvTree))
